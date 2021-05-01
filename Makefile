@@ -1,8 +1,8 @@
 srcdir=.
 CC=g++
 
-LFLAGS=$(shell pkg-config --libs libraw libtiff-4 rtprocess)
-CFLAGS=$(shell pkg-config --cflags libraw libtiff-4 rtprocess)
+LFLAGS=$(shell pkg-config --libs libraw libtiff-4)
+CFLAGS=$(shell pkg-config --cflags libraw libtiff-4)
 
 #Uncomment for mingw32/msys2:
 #EXT=.exe
