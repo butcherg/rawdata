@@ -10,12 +10,12 @@ from the camera raw file and write it to a .dat file.
 ## Prerequisites
 All three programs require Libraw; raw2tiff also requires libtiff.  On Ubuntu:
 
-$ sudo apt-get install libraw-dev libtiff-dev
+```$ sudo apt-get install libraw-dev libtiff-dev```
 
 ## Building
 
-$ mkdir build
+```$ mkdir build
 $ cd build
 $ cmake ..
 $ make
-
+```
