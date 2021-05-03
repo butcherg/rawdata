@@ -5,7 +5,7 @@
 #
 #Usage ./raw4tiff.sh file.RAW file.tif [cameraprofile.icc]
 
-./rawdata $1 $2
+./raw2tiff $1 $2
 exiftool -TagsFromFile $1 $2
 if [ "$3" != "" ]
 then
