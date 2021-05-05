@@ -31,6 +31,8 @@ int main(int argc, char * argv[])
 	int width = RawProcessor.imgdata.sizes.raw_width;
 	int height = RawProcessor.imgdata.sizes.raw_height;
 	
+	//Use undocumented libraw data to get information to extract the image data from the raw file.
+	//ref: https://www.libraw.org/comment/1946#comment-1946
 	libraw_internal_data_t * libraw_internal_data = RawProcessor.get_internal_data_pointer();
 	long int rawimage = libraw_internal_data->unpacker_data.data_offset;
 	long imagesize = libraw_internal_data->unpacker_data.data_size;
