@@ -52,6 +52,7 @@ int main(int argc, char * argv[])
 				fread (imagebuffer, 1, imagesize, r);
 				fwrite(imagebuffer, 1, imagesize, f);
 				fclose(f);
+				free(imagebuffer);
 			}
 			else printf("Error: memory allocation failed.\n");
 		}
