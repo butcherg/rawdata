@@ -32,17 +32,30 @@ int main(int argc, char * argv[])
 	int height = RawProcessor.imgdata.sizes.raw_height;
 	
 	libraw_internal_data_t * libraw_internal_data = RawProcessor.get_internal_data_pointer();
-	char * rawimage = (char *) libraw_internal_data->unpacker_data.data_offset;
+	long int rawimage = libraw_internal_data->unpacker_data.data_offset;
 	long imagesize = libraw_internal_data->unpacker_data.data_size;
 	
 	printf("width: %d  height: %d\n", width, height);
-
-	//Write the array of bytes comprising the image data
-	//to a file:
-	FILE *f = fopen(argv[2], "wb");
-	fwrite (rawimage , 1, imagesize, f);
-	fclose(f);
-
 	RawProcessor.recycle();	
-
+	
+	//use the data offset and size reported by libraw to open the raw file, seek to the offset,
+	//then copy the data from offset to offset+size to the destination file:
+	char * imagebuffer;
+	FILE *r = fopen(argv[1], "rb");
+	if (r) {
+		fseek(r, rawimage, SEEK_SET);
+		FILE *f = fopen(argv[2], "wb");
+		if (f) {
+			if (imagebuffer = (char*) malloc (sizeof(char)* imagesize)) {
+				fread (imagebuffer, 1, imagesize, r);
+				fwrite(imagebuffer, 1, imagesize, f);
+				fclose(f);
+			}
+			else printf("Error: memory allocation failed.\n");
+		}
+		else printf("Error: output file creation failed.\n");
+		fclose(r);
+	}
+	else printf("Error: input file open failed.\n");
+	
 }
