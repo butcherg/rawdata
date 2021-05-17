@@ -1,10 +1,36 @@
-cmake_minimum_required (VERSION 2.8.11)
+
+cmake_minimum_required(VERSION 3.20)
 include(FindPkgConfig)
 
 project (rawdata)
 
-pkg_check_modules(LIBRAW libraw)
-find_package(TIFF)
+#Logic to allow command-line specification of include directories and library paths to subsume
+#the search for system libraries.  -DXXX_INCLUDES=[path] and -DXX_LIBS=[path] invoke that logic.
+#If other paths or -l parameters need to be included, they are added to make the value a semicolon-
+#separated list; don't include -l as cmake will add the appropriate switch.
+if (DEFINED CACHE{LIBRAW_INCLUDES})
+	if (DEFINED CACHE{LIBRAW_LIBS})
+		set(LIBRAW_INCLUDE_DIRS ${LIBRAW_INCLUDES})
+		set(LIBRAW_LIBRARIES ${LIBRAW_LIBS})
+		message(STATUS "Libraw: Using user-specified libraries...")
+	else()
+		message(FATAL_ERROR "Need both LIBRAW_LIBS and LIBRAW_INCLUDES to bypass pkg-config")
+	endif()
+else()
+	pkg_check_modules(LIBRAW REQUIRED libraw)
+endif()
+
+if (DEFINED CACHE{TIFF_INCLUDES})
+	if (DEFINED CACHE{TIFF_LIBS})
+		set(TIFF_INCLUDE_DIRS ${TIFF_INCLUDES})
+		set(TIFF_LIBRARIES ${TIFF_LIBS})
+		message(STATUS "TIFF: Using user-specified libraries...")
+	else()
+		message(FATAL_ERROR "Need both TIFF_LIBRARIES and TIFF_INCLUDES to bypass pkg-config")
+	endif()
+else()
+	pkg_check_modules(TIFF libtiff-4)
+endif()
 
 add_executable(raw2tiff raw2tiff.cpp)
 add_executable(raw2dat raw2dat.cpp)
